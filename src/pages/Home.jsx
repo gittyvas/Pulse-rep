@@ -5,20 +5,13 @@ import { Button } from "@/components/ui/button";
 //    • WhatsApp‑green (#25D366) accent
 //    • Responsive hero, features grid, footer
 //    • Expects a `onLogin` prop (opens Google OAuth)
-// -----------------------------------------------------------------------------
-  export default function Home({ onLogin }) {
+export default function Home({ onLogin }) {
   return (
     <div className="min-h-screen flex flex-col bg-white text-neutral-800">
       {/* Header */}
       <header className="w-full px-6 py-4 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-2">
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               fill="#25D366"
               d="M24 4C13.51 4 5 12.51 5 23c0 3.93 1.2 7.57 3.25 10.6L5 44l10.77-3.11A19 19 0 0 0 24 42c10.49 0 19-8.51 19-19S34.49 4 24 4z"
@@ -46,16 +39,14 @@ import { Button } from "@/components/ui/button";
         </div>
       </header>
 
-      {/* Hero */}
+      {/* Hero with 2 images */}
       <section className="flex flex-col-reverse md:flex-row items-center gap-10 px-6 md:px-12 lg:px-24 pt-12 pb-16 flex-grow">
         <div className="w-full md:w-1/2 text-center md:text-left">
           <h1 className="text-4xl lg:text-5xl font-extrabold leading-tight mb-6">
-            Stay <span className="text-emerald-600">closer</span> to the
-            people who matter.
+            Stay <span className="text-emerald-600">closer</span> to the people who matter.
           </h1>
           <p className="text-lg mb-8 max-w-lg mx-auto md:mx-0">
-            Pulse CRM helps you remember birthdays, follow‑ups, and important
-            moments — all synced from your Google Contacts.
+            Pulse CRM helps you remember birthdays, follow‑ups, and important moments — all synced from your Google Contacts.
           </p>
           <Button
             size="lg"
@@ -66,14 +57,24 @@ import { Button } from "@/components/ui/button";
           </Button>
         </div>
 
-        <motion.img
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          src="/illustrations/dashboard-green.svg"
-          alt="Pulse dashboard screenshot"
-          className="w-full md:w-1/2 rounded-2xl shadow-lg"
-        />
+        <div className="w-full md:w-1/2 flex flex-col gap-6">
+          <motion.img
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            src="/illustrations/dashboard-green.png"
+            alt="Pulse dashboard"
+            className="rounded-2xl shadow-lg"
+          />
+          <motion.img
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            src="/illustrations/dashboard-analytics.png"
+            alt="Analytics dashboard"
+            className="rounded-2xl shadow-lg"
+          />
+        </div>
       </section>
 
       {/* Features */}
@@ -81,41 +82,14 @@ import { Button } from "@/components/ui/button";
         <h2 className="text-3xl font-bold text-center mb-12">Features that connect you</h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {[
-            {
-              title: "Smart Search",
-              desc: "Find any contact in seconds with fuzzy matching and tags.",
-              icon: "search",
-            },
-            {
-              title: "Reminders",
-              desc: "Birthday and follow‑up nudges so you never lose touch.",
-              icon: "bell",
-            },
-            {
-              title: "Notes & Timeline",
-              desc: "Keep context — jot down memories, last talks, and next steps.",
-              icon: "file-text",
-            },
-            {
-              title: "Calendar Sync",
-              desc: "See upcoming events across calendars, right beside contacts.",
-              icon: "calendar",
-            },
-            {
-              title: "Privacy First",
-              desc: "Your data lives in your account. Export or delete anytime.",
-              icon: "shield",
-            },
-            {
-              title: "Instant Setup",
-              desc: "Sign in with Google — no downloads, no chrome extensions.",
-              icon: "zap",
-            },
+            { title: "Smart Search", desc: "Find any contact in seconds with fuzzy matching and tags.", icon: "search" },
+            { title: "Reminders", desc: "Birthday and follow‑up nudges so you never lose touch.", icon: "bell" },
+            { title: "Notes & Timeline", desc: "Keep context — jot down memories, last talks, and next steps.", icon: "file-text" },
+            { title: "Calendar Sync", desc: "See upcoming events across calendars, right beside contacts.", icon: "calendar" },
+            { title: "Privacy First", desc: "Your data lives in your account. Export or delete anytime.", icon: "shield" },
+            { title: "Instant Setup", desc: "Sign in with Google — no downloads, no chrome extensions.", icon: "zap" },
           ].map(({ title, desc, icon }) => (
-            <div
-              key={title}
-              className="p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
-            >
+            <div key={title} className="p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow">
               <div className="w-10 h-10 mb-4 flex items-center justify-center rounded-full bg-emerald-100">
                 <i className={`lucide lucide-${icon} text-emerald-600`}></i>
               </div>
