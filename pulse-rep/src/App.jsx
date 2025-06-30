@@ -16,7 +16,6 @@ import DashboardPage from './pages/Dashboard'
 
 // Static
 import Privacy from './pages/Privacy'
-import Terms from './pages/Terms'
 
 // Scroll to top on route change
 function ScrollToTop() {
