@@ -1,4 +1,10 @@
-import SettingsTable from '../components/SettingsTable'
-export default function SettingsPage() {
-  return <div className="p-6"><SettingsTable /></div>
+import Layout from "../components/Layout"
+
+export default function Settings() {
+  return (
+    <Layout>
+      <h1 className="text-2xl font-bold mb-4">Settings</h1>
+      {/* TODO: Add component for Settings content */}
+    </Layout>
+  )
 }

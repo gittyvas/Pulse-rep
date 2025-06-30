@@ -1,4 +1,10 @@
-import ProfileTable from '../components/ProfileTable'
-export default function ProfilePage() {
-  return <div className="p-6"><ProfileTable /></div>
+import Layout from "../components/Layout"
+
+export default function Profile() {
+  return (
+    <Layout>
+      <h1 className="text-2xl font-bold mb-4">Profile</h1>
+      {/* TODO: Add component for Profile content */}
+    </Layout>
+  )
 }

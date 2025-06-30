@@ -6,5 +6,5 @@ export function Button({ children, onClick, className = "" }) {
     >
       {children}
     </button>
-  )
+  );
 }
