@@ -1,0 +1,9 @@
+[dev]
+  command = "npm run dev"
+  port = 5173
+  targetPort = 5000
+
+[[redirects]]
+  from = "/oauth2callback"
+  to = "http://localhost:5000/callback"
+  status = 200
