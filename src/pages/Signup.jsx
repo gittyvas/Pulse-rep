@@ -4,7 +4,7 @@ import AuthLayout from './AuthLayout';
 export default function Signup() {
   const handleGoogleSignup = () => {
     const clientId = '228967078285-ii28bkm997qm3adj20ilivj1f27ui1n0.apps.googleusercontent.com';
-    const redirectUri = encodeURIComponent('https://pulse.gitthit.com.ng/oauth2callback');
+    const redirectUri = encodeURIComponent('http://127.0.0.1:5000/oauth2callback');
     const scope = encodeURIComponent('https://www.googleapis.com/auth/contacts.readonly email profile');
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline&prompt=consent`;
 
