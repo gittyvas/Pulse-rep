@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { LucideIcon } from "lucide-react";
+import { Search, Bell, FileText, Calendar, Shield, Zap } from 'lucide-react';
 
 export default function Home({ onLogin }) {
   return (
@@ -67,17 +67,17 @@ export default function Home({ onLogin }) {
       <section id="features" className="px-6 md:px-12 lg:px-24 py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-14">Features that connect you</h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {[
-            { title: "Smart Search", desc: "Find any contact in seconds with fuzzy matching and tags.", icon: "search" },
-            { title: "Reminders", desc: "Birthday and follow‑up nudges so you never lose touch.", icon: "bell" },
-            { title: "Notes & Timeline", desc: "Jot down memories, last talks, and next steps.", icon: "file-text" },
-            { title: "Calendar Sync", desc: "See upcoming events beside your contacts.", icon: "calendar" },
-            { title: "Privacy First", desc: "Your data lives in your account. Export or delete anytime.", icon: "shield" },
-            { title: "Instant Setup", desc: "Sign in with Google — no extensions required.", icon: "zap" },
+          {[ 
+            { title: "Smart Search", desc: "Find any contact in seconds with fuzzy matching and tags.", icon: <Search className="w-6 h-6 text-emerald-600" /> },
+            { title: "Reminders", desc: "Birthday and follow‑up nudges so you never lose touch.", icon: <Bell className="w-6 h-6 text-emerald-600" /> },
+            { title: "Notes & Timeline", desc: "Jot down memories, last talks, and next steps.", icon: <FileText className="w-6 h-6 text-emerald-600" /> },
+            { title: "Calendar Sync", desc: "See upcoming events beside your contacts.", icon: <Calendar className="w-6 h-6 text-emerald-600" /> },
+            { title: "Privacy First", desc: "Your data lives in your account. Export or delete anytime.", icon: <Shield className="w-6 h-6 text-emerald-600" /> },
+            { title: "Instant Setup", desc: "Sign in with Google — no extensions required.", icon: <Zap className="w-6 h-6 text-emerald-600" /> },
           ].map(({ title, desc, icon }) => (
             <div key={title} className="p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
               <div className="w-12 h-12 mb-4 flex items-center justify-center rounded-full bg-emerald-100">
-                <i className={`lucide lucide-${icon} text-emerald-600 text-xl`} />
+                {icon}
               </div>
               <h3 className="font-semibold text-lg mb-2">{title}</h3>
               <p className="text-sm text-gray-600 leading-relaxed">{desc}</p>
