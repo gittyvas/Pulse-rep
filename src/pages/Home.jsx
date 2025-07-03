@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom"; // ✅ ADD THIS
 import { Button } from "@/components/ui/button";
-import { Search, Bell, FileText, Calendar, Shield, Zap } from 'lucide-react';
+import { Search, Bell, Calendar, Shield, Zap, FileText } from "lucide-react";
 
-export default function Home({ onLogin }) {
+export default function Home() {
+  const navigate = useNavigate(); // ✅ INITIALIZE HOOK
+
   return (
     <div className="min-h-screen flex flex-col bg-white text-neutral-800">
       {/* Header */}
@@ -26,7 +29,7 @@ export default function Home({ onLogin }) {
       </header>
 
       {/* Hero */}
-      <section className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pt-20 pb-24 gap-12">
+      <section className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pt-20 pb-24 flex flex-col md:flex-row items-center justify-between gap-12">
         <div className="w-full md:w-1/2 text-center md:text-left">
           <h1 className="text-5xl font-extrabold leading-tight mb-6">
             Stay <span className="text-emerald-600">closer</span> to the people who matter.
@@ -37,20 +40,20 @@ export default function Home({ onLogin }) {
           <Button
             size="lg"
             className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-xl px-8 py-5 rounded-2xl text-lg transition"
-            onClick={onLogin}
+            onClick={() => navigate("/signup")} // ✅ REDIRECT TO SIGNUP
           >
             Sign in / Sign up
           </Button>
         </div>
 
-        <div className="w-full md:w-1/2 flex flex-col gap-6">
+        <div className="w-full md:w-1/2 flex flex-col gap-6 max-w-md mx-auto md:mx-0">
           <motion.img
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             src="/illustrations/dashboard-green.png"
             alt="Pulse dashboard"
-            className="rounded-2xl shadow-lg border border-gray-200"
+            className="rounded-2xl shadow-lg border border-gray-200 w-full h-auto object-contain"
           />
           <motion.img
             initial={{ opacity: 0, y: 30 }}
@@ -58,7 +61,7 @@ export default function Home({ onLogin }) {
             transition={{ duration: 0.8 }}
             src="/illustrations/dashboard-analytics.png"
             alt="Analytics dashboard"
-            className="rounded-2xl shadow-lg border border-gray-200"
+            className="rounded-2xl shadow-lg border border-gray-200 w-full h-auto object-contain"
           />
         </div>
       </section>
@@ -67,7 +70,7 @@ export default function Home({ onLogin }) {
       <section id="features" className="px-6 md:px-12 lg:px-24 py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-14">Features that connect you</h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {[ 
+          {[
             { title: "Smart Search", desc: "Find any contact in seconds with fuzzy matching and tags.", icon: <Search className="w-6 h-6 text-emerald-600" /> },
             { title: "Reminders", desc: "Birthday and follow‑up nudges so you never lose touch.", icon: <Bell className="w-6 h-6 text-emerald-600" /> },
             { title: "Notes & Timeline", desc: "Jot down memories, last talks, and next steps.", icon: <FileText className="w-6 h-6 text-emerald-600" /> },
