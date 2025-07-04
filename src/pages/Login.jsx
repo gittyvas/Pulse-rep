@@ -3,12 +3,24 @@ import AuthLayout from './AuthLayout';
 
 export default function Login() {
   const handleGoogleSignIn = () => {
+    // IMPORTANT: Make sure this client ID exactly matches the one in your Google Cloud Console and your backend .env
     const clientId = '228967078285-0l42l4j8q8nhg5mg7vpvph64jb7m643a.apps.googleusercontent.com';
-    const redirectUri = encodeURIComponent('https://pullse.gitthit.com.ng//oauth2callback');
-    const scope = encodeURIComponent('https://www.googleapis.com/auth/contacts.readonly email profile');
+    
+    // IMPORTANT: Double-check the redirect URI. It must EXACTLY match one configured in Google Cloud Console.
+    // Ensure 'pullse' vs 'pulse' and 'oauth2callback' vs 'oauth2callbck' is correct.
+    const redirectUri = encodeURIComponent('https://pullse.gitthit.com.ng/oauth2callback');
+    
+    // Updated to include all four scopes: email, profile, contacts.readonly, and contacts.other.readonly
+    const scope = encodeURIComponent(
+      'https://www.googleapis.com/auth/contacts.readonly ' +
+      'https://www.googleapis.com/auth/contacts.other.readonly ' +
+      'email ' +
+      'profile'
+    );
+    
     const responseType = 'code';
     const accessType = 'offline';
-    const prompt = 'consent';
+    const prompt = 'consent'; // Ensures users are prompted for consent, even if previously granted, to get a fresh refresh token
 
     const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&access_type=${accessType}&prompt=${prompt}`;
 
