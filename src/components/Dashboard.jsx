@@ -1,28 +1,137 @@
-// CRM Dashboard internal page for Pulse after login
-// Responsive, minimal, WhatsApp‑green accent (#25D366)
-// Works in any React (Vite) project — no Framer‑specific APIs needed.
-// ---------------------------------------------------------------
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect for lifecycle hooks
 
 export default function Dashboard({
   darkMode = false,
   showDarkModeToggle = true,
-  totalContacts = 128,
-  remindersToday = 3,
-  recentNotes = 7,
 }) {
   const accent = "#25D366";
   const [isDark, setDark] = useState(darkMode);
+  const [active, setActive] = useState(0); // State for active sidebar link
+  const [userProfile, setUserProfile] = useState(null); // State to store user profile (e.g., name, email)
+  const [contacts, setContacts] = useState([]); // State to store fetched contacts
+  const [loading, setLoading] = useState(true); // State to manage loading status
+  const [error, setError] = useState(null); // State to manage errors
+
+  // --- Backend API Base URL ---
+  // Replace with your actual deployed Render backend URL
+  const BACKEND_BASE_URL = "https://pullse.gitthit.com.ng"; // Make sure this is your correct backend URL
+
+  // --- Effect to extract JWT, fetch user profile, and contacts on component mount ---
+  useEffect(() => {
+    const fetchUserData = async () => {
+      setLoading(true);
+      setError(null);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const appJwt = urlParams.get('token');
+
+      let currentJwt = localStorage.getItem('app_jwt');
+
+      // If a new token is in the URL, use it. Otherwise, use the stored one.
+      if (appJwt) {
+        localStorage.setItem('app_jwt', appJwt);
+        currentJwt = appJwt; // Use the new token immediately
+        // Clean the URL to remove the token from the address bar
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      if (!currentJwt) {
+        console.warn("No JWT found. User needs to log in.");
+        // Redirect to your login page if no token is available
+        // window.location.href = '/login';
+        setError("Please log in to access the dashboard.");
+        setLoading(false);
+        return;
+      }
+
+      // --- Fetch User Profile (if you have a /api/me or /api/user endpoint) ---
+      // Your backend might not have this, so this part is optional.
+      // If your backend provides user info via the JWT itself, you can decode it.
+      try {
+          // Example of decoding JWT if user name is in it (requires a JWT library like 'jwt-decode')
+          // import { jwtDecode } from 'jwt-decode';
+          // const decoded = jwtDecode(currentJwt);
+          // setUserProfile({ name: decoded.user_name || 'User', email: decoded.user_email });
+
+          // If you have a backend endpoint for user profile:
+          const userProfileResponse = await fetch(`${BACKEND_BASE_URL}/api/me`, { // Assuming /api/me endpoint
+              method: 'GET',
+              headers: {
+                  'Authorization': `Bearer ${currentJwt}`,
+                  'Content-Type': 'application/json'
+              }
+          });
+
+          if (userProfileResponse.status === 401) {
+              console.error("User profile session expired. Logging out.");
+              handleLogout(); // Log out if token is invalid for profile
+              return;
+          }
+          if (!userProfileResponse.ok) {
+              throw new Error(`Failed to fetch user profile: ${userProfileResponse.statusText}`);
+          }
+          const profileData = await userProfileResponse.json();
+          setUserProfile(profileData); // Assuming profileData has a 'name' field
+      } catch (profileError) {
+          console.warn("Could not fetch user profile (this might be expected if no /api/me endpoint):", profileError);
+          setUserProfile({ name: 'User' }); // Fallback
+      }
+
+
+      // --- Fetch Contacts ---
+      try {
+        const contactsResponse = await fetch(`${BACKEND_BASE_URL}/api/contacts`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${currentJwt}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (contactsResponse.status === 401) {
+          console.error("Contacts session expired. Logging out.");
+          handleLogout(); // Log out if token is invalid for contacts
+          return;
+        }
+
+        if (!contactsResponse.ok) {
+          throw new Error(`Failed to fetch contacts: ${contactsResponse.statusText}`);
+        }
+
+        const contactsData = await contactsResponse.json();
+        setContacts(contactsData);
+        console.log("Fetched Contacts:", contactsData);
+
+      } catch (contactsError) {
+        console.error("Error fetching contacts:", contactsError);
+        setError("Failed to load contacts. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []); // Run only once on component mount
+
+  // --- Logout Function ---
+  const handleLogout = () => {
+    localStorage.removeItem('app_jwt'); // Clear the JWT
+    // Optionally clear other user-related data from local storage
+    // Redirect to your login page
+    window.location.href = '/login'; // Or your actual login route
+  };
+
+
   const sidebarLinks = [
-    { label: "Dashboard", icon: "🏠" },
-    { label: "Contacts", icon: "👥" },
-    { label: "Reminders", icon: "⏰" },
-    { label: "Notes", icon: "📝" },
-    { label: "Search", icon: "🔍" },
-    { label: "Profile", icon: "👤" },
-    { label: "Settings", icon: "⚙️" },
+    { label: "Dashboard", icon: "🏠", path: "#dashboard" },
+    { label: "Contacts", icon: "👥", path: "#contacts" },
+    { label: "Reminders", icon: "⏰", path: "#reminders" },
+    { label: "Notes", icon: "📝", path: "#notes" },
+    { label: "Search", icon: "🔍", path: "#search" },
+    { label: "Profile", icon: "👤", path: "#profile" },
+    { label: "Settings", icon: "⚙️", path: "#settings" },
+    { label: "Logout", icon: "🚪", action: handleLogout }, // Add logout link
   ];
-  const [active, setActive] = useState(0);
 
   const Logo = (
     <svg
@@ -106,7 +215,7 @@ export default function Dashboard({
           {sidebarLinks.map((link, i) => (
             <a
               key={link.label}
-              href="#"
+              href={link.path || "#"} // Use link.path or default to #
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -127,6 +236,12 @@ export default function Dashboard({
               onClick={(e) => {
                 e.preventDefault();
                 setActive(i);
+                if (link.action) { // If there's an action, execute it (e.g., logout)
+                  link.action();
+                } else if (link.path) {
+                    // Handle internal navigation for other links if you have routing
+                    // For now, just change active state
+                }
               }}
               onMouseOver={(e) =>
                 (e.currentTarget.style.background = "rgba(37,211,102,0.12)")
@@ -169,7 +284,11 @@ export default function Dashboard({
           }}
         >
           <div style={{ fontWeight: 600, fontSize: 20, letterSpacing: -0.5 }}>
-            Welcome, <span style={{ color: accent }}>Alex</span>
+            Welcome,{" "}
+            <span style={{ color: accent }}>
+              {userProfile ? userProfile.name : "User"}
+            </span>{" "}
+            {/* Display fetched user name */}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
             {showDarkModeToggle && (
@@ -194,6 +313,7 @@ export default function Dashboard({
             >
               🔔
             </span>
+            {/* User Avatar - You might want to display userProfile.picture here if available */}
             <span
               style={{
                 width: 38,
@@ -209,7 +329,7 @@ export default function Dashboard({
                 boxShadow: "0 2px 8px rgba(37,211,102,0.10)",
               }}
             >
-              A
+              {userProfile && userProfile.name ? userProfile.name.charAt(0).toUpperCase() : 'U'}
             </span>
           </div>
         </header>
@@ -226,39 +346,91 @@ export default function Dashboard({
           <SummaryCard
             icon="👥"
             label="Total Contacts"
-            value={totalContacts}
+            value={loading ? "..." : error ? "Error" : contacts.length} {/* Display actual total contacts */}
             accent={accent}
             darkMode={isDark}
           />
           <SummaryCard
             icon="⏰"
             label="Reminders Today"
-            value={remindersToday}
+            value={0} // Placeholder: You'll need an API for this
             accent={accent}
             darkMode={isDark}
           />
           <SummaryCard
             icon="📝"
             label="Recent Notes"
-            value={recentNotes}
+            value={0} // Placeholder: You'll need an API for this
             accent={accent}
             darkMode={isDark}
           />
         </section>
 
-        {/* Main content placeholder */}
-        <main style={{ flex: 1, padding: 32, minHeight: 0 }}>
-          <div>
-            <p style={{ fontSize: 16, color: isDark ? "#ccc" : "#555" }}>
-              Dashboard content goes here.
-            </p>
-          </div>
+        {/* Main content area for Contacts */}
+        <main style={{ flex: 1, padding: 32, minHeight: 0, overflowY: 'auto' }}>
+          <h2>Your Google Contacts</h2>
+          {loading && <p>Loading contacts...</p>}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {!loading && !error && contacts.length === 0 && (
+            <p>No contacts found. Make sure you granted Google Contacts permission.</p>
+          )}
+          {!loading && !error && contacts.length > 0 && (
+            <div id="contacts-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+              {contacts.map((contact) => (
+                <div
+                  key={contact.resource_name} // Use resource_name as a unique key
+                  style={{
+                    border: `1px solid ${isDark ? "#333" : "#EEE"}`,
+                    borderRadius: '8px',
+                    padding: '15px',
+                    background: isDark ? "#2A2E31" : "#FDFDFD",
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '15px'
+                  }}
+                >
+                  {contact.photo_url ? (
+                    <img
+                      src={contact.photo_url}
+                      alt={contact.name || 'Contact Photo'}
+                      style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: '60px', height: '60px', borderRadius: '50%', background: accent,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: '#fff', fontSize: '24px', fontWeight: 'bold'
+                      }}
+                    >
+                      {contact.name ? contact.name.charAt(0).toUpperCase() : '?'}
+                    </div>
+                  )}
+                  <div>
+                    <h3 style={{ margin: '0 0 5px 0', color: isDark ? '#FFF' : '#222' }}>{contact.name || 'Unknown Contact'}</h3>
+                    {contact.emails && contact.emails.length > 0 && (
+                      <p style={{ margin: '0', fontSize: '14px', color: isDark ? '#CCC' : '#555' }}>
+                        Email: {contact.emails.join(', ')}
+                      </p>
+                    )}
+                    {contact.phones && contact.phones.length > 0 && (
+                      <p style={{ margin: '0', fontSize: '14px', color: isDark ? '#CCC' : '#555' }}>
+                        Phone: {contact.phones.join(', ')}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </main>
       </div>
     </div>
   );
 }
 
+// SummaryCard component remains largely the same
 function SummaryCard({ icon, label, value, accent, darkMode }) {
   return (
     <div
