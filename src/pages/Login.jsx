@@ -3,7 +3,7 @@ import AuthLayout from './AuthLayout';
 
 export default function Login() {
   const handleGoogleSignIn = () => {
-    const clientId = '228967078285-ii28bkm997qm3adj20ilivj1f27ui1n0.apps.googleusercontent.com';
+    const clientId = '228967078285-0l42l4j8q8nhg5mg7vpvph64jb7m643a.apps.googleusercontent.com';
     const redirectUri = encodeURIComponent('https://pullse.gitthit.com.ng//oauth2callback');
     const scope = encodeURIComponent('https://www.googleapis.com/auth/contacts.readonly email profile');
     const responseType = 'code';
