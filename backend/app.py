@@ -73,4 +73,5 @@ def protected():
     return jsonify({'message': f'Welcome {current_user}!'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Listen on every network interface (0.0.0.0) and port 5000
+    app.run(host='0.0.0.0', port=5000, debug=True)
