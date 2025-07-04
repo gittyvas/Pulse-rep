@@ -1,20 +1,17 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import Dashboard from "../components/Dashboard";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function DashboardPage() {
-  const location = useLocation();
+export default function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get("token");
-
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
     if (token) {
-      localStorage.setItem("authToken", token);
-      navigate("/dashboard", { replace: true }); // clean up URL
+      localStorage.setItem('token', token);
+      navigate('/dashboard');
     }
-  }, [location, navigate]);
-
-  return <Dashboard />;
+  }, []);
+  
+  return <div>Welcome to Pulse Dashboard</div>;
 }

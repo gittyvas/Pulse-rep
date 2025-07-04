@@ -4,7 +4,7 @@ import AuthLayout from './AuthLayout';
 export default function Login() {
   const handleGoogleSignIn = () => {
     const clientId = '228967078285-ii28bkm997qm3adj20ilivj1f27ui1n0.apps.googleusercontent.com';
-    const redirectUri = encodeURIComponent('http://127.0.0.1:5000/oauth2callback');
+    const redirectUri = encodeURIComponent('https://25e2-102-90-49-27.ngrok-free.app/oauth2callback');
     const scope = encodeURIComponent('https://www.googleapis.com/auth/contacts.readonly email profile');
     const responseType = 'code';
     const accessType = 'offline';
