@@ -8,7 +8,7 @@ export default function Login() {
     
     // IMPORTANT: Double-check the redirect URI. It must EXACTLY match one configured in Google Cloud Console.
     // Ensure 'pullse' vs 'pulse' and 'oauth2callback' vs 'oauth2callbck' is correct.
-    const redirectUri = encodeURIComponent('https://pullse.gitthit.com.ng/oauth2callback');
+    const redirectUri = encodeURIComponent('https://1db5-102-90-97-173.ngrok-free.app/oauth2callback');
     
     // Updated to include all four scopes: email, profile, contacts.readonly, and contacts.other.readonly
     const scope = encodeURIComponent(
