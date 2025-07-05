@@ -3,28 +3,14 @@ import AuthLayout from './AuthLayout';
 
 export default function Login() {
   const handleGoogleSignIn = () => {
-    // IMPORTANT: Make sure this client ID exactly matches the one in your Google Cloud Console and your backend .env
-    const clientId = '228967078285-0l42l4j8q8nhg5mg7vpvph64jb7m643a.apps.googleusercontent.com';
-    
-    // IMPORTANT: Double-check the redirect URI. It must EXACTLY match one configured in Google Cloud Console.
-    // Ensure 'pullse' vs 'pulse' and 'oauth2callback' vs 'oauth2callbck' is correct.
-    const redirectUri = encodeURIComponent('https://1db5-102-90-97-173.ngrok-free.app/oauth2callback');
-    
-    // Updated to include all four scopes: email, profile, contacts.readonly, and contacts.other.readonly
-    const scope = encodeURIComponent(
-      'https://www.googleapis.com/auth/contacts.readonly ' +
-      'https://www.googleapis.com/auth/contacts.other.readonly ' +
-      'email ' +
-      'profile'
-    );
-    
-    const responseType = 'code';
-    const accessType = 'offline';
-    const prompt = 'consent'; // Ensures users are prompted for consent, even if previously granted, to get a fresh refresh token
+    // 👇️ Make sure this matches your actual Google OAuth client ID
+    const clientId = '299613772961-p51fdus5h4j280c159kq907s1c9rb1ct.apps.googleusercontent.com';
 
-    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&access_type=${accessType}&prompt=${prompt}`;
+    // This is your production backend route that starts the OAuth flow
+    const backendOauthUrl = 'https://pulse.gitthit.com.ng/auth/google';
 
-    window.location.href = oauthUrl;
+    // Redirect user to backend to handle OAuth
+    window.location.href = backendOauthUrl;
   };
 
   return (

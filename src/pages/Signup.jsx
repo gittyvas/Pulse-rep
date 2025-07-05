@@ -3,24 +3,11 @@ import AuthLayout from './AuthLayout';
 
 export default function Signup() {
   const handleGoogleSignup = () => {
-    // IMPORTANT: Make sure this client ID exactly matches the one in your Google Cloud Console and your backend .env
-    const clientId = '228967078285-0l42l4j8q8nhg5mg7vpvph64jb7m643a.apps.googleusercontent.com';
-    
-    // IMPORTANT: Double-check the redirect URI. It must EXACTLY match one configured in Google Cloud Console.
-    // Ensure 'pullse' vs 'pulse' and 'oauth2callback' vs 'oauth2callbck' is correct.
-    const redirectUri = encodeURIComponent('https://1db5-102-90-97-173.ngrok-free.app/oauth2callback');
-    
-    // Updated to include all four scopes: email, profile, contacts.readonly, and contacts.other.readonly
-    const scope = encodeURIComponent(
-      'https://www.googleapis.com/auth/contacts.readonly ' +
-      'https://www.googleapis.com/auth/contacts.other.readonly ' +
-      'email ' +
-      'profile'
-    );
-    
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline&prompt=consent`;
+    // 👇️ Point to your backend OAuth route
+    const backendOauthUrl = 'https://pulse.gitthit.com.ng/auth/google';
 
-    window.location.href = authUrl;
+    // 🔁 Send user to backend to handle OAuth
+    window.location.href = backendOauthUrl;
   };
 
   return (
@@ -50,7 +37,6 @@ export default function Signup() {
 
         <div className="text-center text-gray-500 text-sm">or</div>
 
-        {/* ✅ Google OAuth button */}
         <button
           type="button"
           onClick={handleGoogleSignup}
